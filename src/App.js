@@ -1,3 +1,4 @@
+//import 'react-hot-loader'
 import "./App.css";
 import { Routes, Route } from "react-router-dom";
 import SignIn from "./components/SignIn";
@@ -8,27 +9,44 @@ import ToDo from "./components/ToDo";
 import SignUp from "./components/SignUp";
 import Admin from "./components/Admin";
 import RememberMe from "./components/RememberMe";
+import Welcome from "./components/Welcome";
+import InventoryByClassrooms from "./components/InventoryByClassrooms";
+import Select from "./components/Select";
+import Profile from "./components/Profile";
+import Documents from "./components/Documents";
 
 const ROLES = {
-  ADMIN: 'ADMIN',
-  MODERATOR: 'MODERATOR',
-  READER: 'READER',
+  ADMIN: "ADMIN",
+  MODERATOR: "MODERATOR",
+  READER: "READER",
 };
 
 const App = () => {
   return (
     <Routes>
-      <Route path="/" element={<Layout />}>
+      <Route element={<Layout />}>
+        <Route path="/" element={<Welcome />}></Route>
         <Route path="signIn" element={<SignIn />}></Route>
         <Route path="signUp" element={<SignUp />}></Route>
+        <Route path="todo" element={<ToDo />}></Route>
+        <Route path="select" element={<Select />}></Route>
 
         <Route element={<RememberMe />}>
-          <Route element={<RequireAuth roles={['MODERATOR']} />}>
+          <Route element={<RequireAuth roles={["MODERATOR"]} />}>
             <Route path="inventory" element={<Inventory />}></Route>
+            <Route
+              path="classrooms"
+              element={<InventoryByClassrooms />}
+            ></Route>
+            <Route
+              path="documents"
+              element={<Documents />}
+            ></Route>
           </Route>
-          <Route element={<RequireAuth roles={['ADMIN']} />}>
+          <Route element={<RequireAuth roles={["ADMIN"]} />}>
             <Route path="admin" element={<Admin />}></Route>
           </Route>
+          <Route path="profile" element={<Profile />}></Route>
         </Route>
       </Route>
     </Routes>

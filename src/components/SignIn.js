@@ -40,10 +40,14 @@ const SignIn = () => {
 
     const accessToken = data["access_token"];
     const roles = data["roles"][0];
+    const id = data["id"];
+    const usernameDb = data["username"];
 
     localStorage.setItem("roles", roles);
     setAuth({ accessToken });
     setAuth({ roles });
+    setAuth({ id });
+    setAuth({ usernameDb });
 
     //navigate(from, { replace: true });
 

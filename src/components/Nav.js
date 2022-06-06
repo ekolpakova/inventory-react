@@ -4,6 +4,9 @@ import Inventory from "./Inventory";
 
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import Admin from "./Admin";
+import InventoryByClassrooms from "./InventoryByClassrooms";
+import Profile from "./Profile";
+import Documents from "./Documents"
 
 const Nav = () => {
   return (
@@ -16,6 +19,8 @@ const Nav = () => {
         <Link to="inventory" element={<Inventory />} className="link link__bright">
           Инвентарь
         </Link>
+        <Link to="documents" element={<Documents />} className="link link__bright">Документы</Link>
+        <Link to="classrooms" element={<InventoryByClassrooms />} className="link link__bright">Кабинеты</Link>
         <Link to="admin" element={<Admin />} className="link link__bright">
           Управление
         </Link>

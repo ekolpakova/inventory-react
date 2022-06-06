@@ -12,16 +12,14 @@ const InventoryByClassrooms = () => {
   const [classnum, setClassnum] = useState();
   const [categories, setCategories] = useState([]);
   const { handleFilter, filteredItems, setFilteredItems } = useCRUD();
-  const [param, setParam] = useState("serialNumber");
+  const [param, setParam] = useState("name");
   const [value, setValue] = useState("");
   //const [inventoryItems, setInventoryItems] = useState([{ category_id: 1 }]);
 
   const handleFilterLive = (key) => {
     console.log(key);
-    //console.log("c" + classrooms.map((c) => c.inventoryItems.map((i) => i.category.id)));
-    setClassrooms([
-      classrooms.filter((item) => item.inventoryItems.map((i) => i.category.id === key) || [])
-      //...classrooms.filter((item) => item.id === 2)
+    setFilteredItems([
+      ...filteredItems.filter((item) => item.category.id === key),
     ]);
     console.log(filteredItems);
   };
@@ -142,6 +140,14 @@ const InventoryByClassrooms = () => {
               gridTemplateColumns: "150px 1fr",
             }}
           >
+            <select
+              className="dropdown"
+              onChange={(e) => handleFilterLive(e.target.value)}
+            >
+              {categories.map((cat) => (
+                <option value={cat.id}>{cat.name}</option>
+              ))}
+            </select>
             <form onSubmit={(e) => handleFilter(e, param, value)}>
               <div>
                 <div className="input-Container">
@@ -157,17 +163,7 @@ const InventoryByClassrooms = () => {
                     type="submit"
                     value="Найти"
                     className="button buttonFilter"
-                    style={{ padding: "0.5rem" }}
                   ></input>
-                  <select
-                    className="dropdown"
-                    onChange={(e) => handleFilterLive(e.target.value)}
-                    style={{ marginLeft: "1rem" }}
-                  >
-                    {categories.map((cat) => (
-                      <option value={cat.id}>{cat.name}</option>
-                    ))}
-                  </select>
                 </div>
               </div>
             </form>
@@ -181,18 +177,14 @@ const InventoryByClassrooms = () => {
                   gridTemplateColumns: "repeat(3, 1fr)",
                   backgroundColor: "aliceblue",
                   borderRadius: "0.5rem",
-                  maxWidth: "700px",
                 }}
               >
                 {classroom.name === classnum &&
                   classroom.inventoryItems.map((item) => (
                     <div>
-                      <div>Инвентарный номер</div>
-                      <div>{item.serialNumber}</div>
-                      <div>Категория</div>
-                      <div>
-                        {item.category.name}
-                      </div>
+                      {" "}
+                      <div>{item.name}</div>
+                      <div>{item.category.name}</div>
                     </div>
                   ))}
               </div>
@@ -201,7 +193,7 @@ const InventoryByClassrooms = () => {
             filteredItems.map((item) => (
               <div key={item.id}>
                 {" "}
-                <div>{item.serialNumber}</div>
+                <div>{item.name}</div>
                 <div>{item.category.name}</div>
               </div>
             ))}

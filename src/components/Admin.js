@@ -1,9 +1,10 @@
-import { FormControl, InputLabel, Select, MenuItem } from "@mui/material";
 import { useEffect, useState } from "react";
 import useSetInterceptors from "../hooks/useSetInterceptors";
 import Constants from "../constants/Constants";
+import useAuth from "../hooks/useAuth";
 
 import AddCircleIcon from "@mui/icons-material/AddCircle";
+import RemoveCircleIcon from "@mui/icons-material/RemoveCircle";
 
 const Admin = () => {
   const ROLES = {
@@ -14,8 +15,41 @@ const Admin = () => {
 
   const [users, setUsers] = useState({});
   const setInterceptors = useSetInterceptors();
+  const { auth } = useAuth();
 
   const useConstants = Constants();
+
+  //const CRUD = useCRUD();
+  const handleAddRoleToUser = async (username, name) => {
+    const api = `http://localhost:8080/api/v1/admin/addRoleToUser`;
+    const res = await setInterceptors.put(api, null, {
+      params: {
+        username: username,
+        name: name
+      },
+      headers: {
+        Authorization: `Bearer ${auth.accessToken}`
+      }
+    })
+
+    const data = await res.data;
+
+    setUsers((prev) => [...prev, data]);
+
+    console.log(data);
+  };
+
+  const handleRemoveRoles = async (username) => {
+    const api = `http://localhost:8080/api/v1/admin/removeRolesFromUser`;
+    const res = await setInterceptors.delete(api, {
+      params: {
+        username: username,
+      },
+      headers: {
+        Authorization: `Bearer ${auth.accessToken}`,
+      },
+    });
+  }
 
   useEffect(() => {
     let isMounted = true;
@@ -63,7 +97,7 @@ const Admin = () => {
                   <div>{user.id}</div>
                   <div>
                     <select className="dropdown">
-                      {user.roles
+                      {user?.roles !== undefined && user?.roles
                         .map((role) => role.name)
                         .map((r) => (
                           <option>{r}</option>
@@ -71,13 +105,22 @@ const Admin = () => {
                     </select>
                   </div>
                   <div>
-                    <select className="dropdown">
+                    <select
+                      className="dropdown"
+                      onChange={(e) =>
+                        handleAddRoleToUser(user.username, e.target.value)
+                      }
+                    >
                       {["ADMIN", "MODERATOR", "READER"].map((constant) => (
-                        <option>{constant}</option>
+                        <option value={constant}>{constant}</option>
                       ))}
                     </select>
                   </div>
-                  <div><i><AddCircleIcon className="circleBlue"/></i></div>
+                  <div>
+                    <i>
+                      <RemoveCircleIcon className="circleRemove" onClick={(e) => handleRemoveRoles(user.username)}/>
+                    </i>
+                  </div>
                 </div>
               </div>
             ))
@@ -86,7 +129,6 @@ const Admin = () => {
           )}
         </div>
       </div>
-
     </div>
   );
 };

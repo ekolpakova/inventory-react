@@ -24,10 +24,12 @@ export const useGetNewAccessToken = () => {
         ...prev,
         accessToken: data["access_token"],
         roles: data["roles"][0],
+        id: data["id"],
+        username: data["username"]
       };
     });
 
-    return data["access_token"], data["roles"][0]
+    return data["access_token"], data["roles"][0], data["id"]
   };
   return refresh;
 };

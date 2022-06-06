@@ -20,7 +20,7 @@ const SignUp = () => {
 
   const handleRegister = async (e, username, password) => {
     e.preventDefault();
-    const api = `http://localhost:8080/api/v1/test/signUp`;
+    const api = `http://localhost:8080/api/v1/public/signUp`;
     const json = JSON.stringify({ username: username, password: password })
     const res = await axios.post(api, json, {
       headers: {

@@ -21,6 +21,14 @@ const ToDo = () => {
     );*/
   };
 
+  useEffect(() => {
+    setTodos(
+      todos.filter((todo) => todo.name.includes("Drake"))
+    );
+  });
+
+  //useEffect(() => setTodos(todos.filter((todo) => todo.name === "Josh")));
+
   return (
     <div>
       {todos.map((todo, i) => (
@@ -32,7 +40,7 @@ const ToDo = () => {
               setTodo(e.target.value);
             }}
             onDoubleClick={(e) => {
-                handleUpdate(e, i);
+              handleUpdate(e, i);
             }}
           />
           <input

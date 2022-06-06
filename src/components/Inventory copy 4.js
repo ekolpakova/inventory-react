@@ -24,7 +24,6 @@ const Inventory = (props) => {
 
   const [category, setCategory] = useState("");
   const [categoryId, setCategoryId] = useState(1);
-  const [id, setId] = useState();
 
   const [name, setName] = useState("");
   const [specs, setSpecs] = useState("");
@@ -39,7 +38,6 @@ const Inventory = (props) => {
 
   const [filter, setFilter] = useState("");
   const [search, setSearch] = useState("");
-  const [date, setDate] = useState("");
 
   const [inputs, setInputs] = useState([{ name: "Default" }]);
 
@@ -117,12 +115,6 @@ const Inventory = (props) => {
       isMounted = false;
       controller.abort();
     };
-  };
-
-  const handleFilterLive = (e) => {
-          setInventoryItems([
-            ...inventoryItems.filter((item) => item.category.name !== value),
-          ]);
   };
 
   /*useEffect(() => {
@@ -206,6 +198,31 @@ const Inventory = (props) => {
       ),
     }*/
     );
+  };
+
+  const handleDelete = async (e, key) => {
+    e.preventDefault();
+    console.log("Delete " + key);
+
+    const api = `http://localhost:8080/api/v1/moderator/deleteInventoryItem`;
+    const res = await setInterceptors.delete(
+      api,
+      { params: { id: key } },
+      null
+    );
+
+    let isDelete = window.confirm("Удалить запись?");
+    alert(isDelete);
+
+    setInventoryItems((prev) => [
+      prev.filter((item) => item !== e.target.value),
+    ]);
+
+    if (res.data === 1) {
+      console.log("Элемент удалён");
+    } else {
+      console.log("Элемент не удалён");
+    }
   };
 
   const handleUpdate = async (e, id, col, colVal) => {
@@ -292,30 +309,7 @@ const Inventory = (props) => {
       isMounted = false;
       controller.abort();
     };
-  });
-
-  const handleDelete = async (e, key) => {
-    e.preventDefault();
-    console.log("Delete " + key);
-
-    const api = `http://localhost:8080/api/v1/moderator/deleteInventoryItem`;
-    const res = await setInterceptors.delete(
-      api,
-      { params: { id: key } },
-      null
-    );
-
-    let isDelete = window.confirm("Удалить запись?");
-    alert(isDelete);
-
-    setInventoryItems([...inventoryItems.filter((item) => item.id !== key)]);
-
-    if (res.data === 1) {
-      console.log("Элемент удалён");
-    } else {
-      console.log("Элемент не удалён");
-    }
-  };
+  }, []);
 
   return (
     <div className="main">
@@ -330,7 +324,6 @@ const Inventory = (props) => {
               className="search"
               onChange={(e) => setValue(e.target.value)}
               placeholder="Поиск по наименованию..."
-              value={value}
             ></input>
             <input
               type="submit"
@@ -403,7 +396,7 @@ const Inventory = (props) => {
                     ></textarea>
                   </div>
 
-                  {inventoryItem.category !== undefined && (
+                  {inventoryItem.category.name !== undefined && (
                     <div>
                       <textarea
                         defaultValue={inventoryItem.category.name}
@@ -555,13 +548,6 @@ const Inventory = (props) => {
 
               <form id="addForm" className="contents">
                 <div>
-                  <input
-                    type="text"
-                    className="table-input"
-                    onChange={(e) => setId(e.target.value)}
-                  ></input>
-                </div>
-                <div>
                   <select
                     className="dropdown"
                     name="dropdown"
@@ -603,13 +589,6 @@ const Inventory = (props) => {
                   ></input>
                 </div>
                 <div>
-                  <input
-                    type="date"
-                    className="table-input"
-                    onChange={(e) => setDate(e.target.value)}
-                  ></input>
-                </div>
-                <div>
                   <IconButton onClick={(e) => handleCreate(e)}>
                     <AddCircleIcon className="circleAdd"></AddCircleIcon>
                   </IconButton>
@@ -642,168 +621,77 @@ const Inventory = (props) => {
           {filteredItems.map((item) => {
             <div>{item.name}</div>;
           })}
-        </>
-      )}
-      {filteredItems.length > 0 ? (
-        <div className="headings-first">
-          <div>№ п/п</div>
-          <div>Категория</div>
-          <div>Наименование</div>
-          <div>Характеристики</div>
-          <div>Комментарий</div>
-          <div>Комментарий А.М.Чернега</div>
-          <div>Дата принятия к учёту</div>
-          <div>Действие</div>
-        </div>
-      ) : null}
-      {filteredItems.map((inventoryItem, idx) => (
-        <>
+          <div>Загрузка элементов инвентаря...</div>
           <div className="table">
-            <div className="headings">
-              <div>№ п/п</div>
+            <div className="headings-first">
               <div>Категория</div>
               <div>Наименование</div>
               <div>Характеристики</div>
               <div>Комментарий</div>
-              <div>Комментарий А.М.Чернега</div>
-              <div>Дата принятия к учёту</div>
               <div>Действие</div>
             </div>
-            <div className="contents">
-              <div>
-                <textarea
-                  defaultValue={inventoryItem.id}
-                  onChange={(e) => {
-                    setInventoryItem(e.target.value);
-                  }}
-                  onClick={() => (prevInventoryItem.current = inventoryItem.id)}
-                  onDoubleClick={(e) => {
-                    handleUpdate(e, inventoryItem.id, "id", e.target.value);
-                  }}
-                ></textarea>
-              </div>
 
-              {inventoryItem.category !== undefined && (
-                <div>
-                  <textarea
-                    defaultValue={inventoryItem.category.name}
-                    onChange={(e) => {
-                      setInventoryItem(e.target.value);
-                    }}
-                    onClick={() =>
-                      (prevInventoryItem.current = inventoryItem.category.name)
-                    }
-                    onDoubleClick={(e) => {
-                      handleUpdate(
-                        e,
-                        {
-                          id: inventoryItem.category.id,
-                          name: inventoryItem.category.name,
-                        },
-                        "category",
-                        e.target.value
-                      );
-                    }}
-                  ></textarea>
-                </div>
-              )}
-
+            <form id="addForm" className="contents">
               <div>
-                <textarea
-                  key={idx}
-                  defaultValue={inventoryItem.name}
-                  onChange={(e) => {
-                    setInventoryItem(e.target.value);
-                  }}
-                  onClick={() =>
-                    (prevInventoryItem.current = inventoryItem.name)
-                  }
-                  onDoubleClick={(e) => {
-                    handleUpdate(e, inventoryItem.id, "name", e.target.value);
-                  }}
-                ></textarea>
+                <select
+                  className="dropdown"
+                  name="dropdown"
+                  onChange={(e) => setCategoryId(e.target.value)}
+                >
+                  {categories.length > 0} ? (
+                  {categories.map((cat) => (
+                    <option value={cat.id}>{cat.name}</option>
+                  ))}
+                  )
+                </select>
               </div>
               <div>
-                <textarea
-                  defaultValue={inventoryItem.specs}
-                  onChange={(e) => {
-                    setInventoryItem(e.target.value);
-                  }}
-                  onClick={() =>
-                    (prevInventoryItem.current = inventoryItem.specs)
-                  }
-                  onDoubleClick={(e) => {
-                    handleUpdate(e, inventoryItem.id, "specs", e.target.value);
-                  }}
-                ></textarea>
+                <input
+                  type="text"
+                  className="table-input"
+                  onChange={(e) => setName(e.target.value)}
+                ></input>
               </div>
               <div>
-                <textarea
-                  defaultValue={inventoryItem.commentary}
-                  onChange={(e) => {
-                    setInventoryItem(e.target.value);
-                  }}
-                  onClick={() =>
-                    (prevInventoryItem.current = inventoryItem.commentary)
-                  }
-                  onDoubleClick={(e) => {
-                    handleUpdate(
-                      e,
-                      inventoryItem.id,
-                      "commentary",
-                      e.target.value
-                    );
-                  }}
-                ></textarea>
-              </div>
-
-              <div>
-                <textarea
-                  defaultValue={inventoryItem.commentaryChernega}
-                  onChange={(e) => {
-                    setInventoryItem(e.target.value);
-                  }}
-                  onClick={() =>
-                    (prevInventoryItem.current =
-                      inventoryItem.commentaryChernega)
-                  }
-                  onDoubleClick={(e) => {
-                    handleUpdate(
-                      e,
-                      inventoryItem.id,
-                      "commentaryChernega",
-                      e.target.value
-                    );
-                  }}
-                ></textarea>
+                <input
+                  type="text"
+                  className="table-input"
+                  onChange={(e) => setSpecs(e.target.value)}
+                ></input>
               </div>
               <div>
-                <textarea
-                  defaultValue={new Date(
-                    inventoryItem.dateTaken
-                  ).toLocaleDateString("cv")}
-                  onChange={(e) => {
-                    setInventoryItem(e.target.value);
-                  }}
-                  onClick={() =>
-                    (prevInventoryItem.current = inventoryItem.dateTaken)
-                  }
-                  onDoubleClick={(e) => {
-                    handleUpdate(
-                      e,
-                      inventoryItem.id,
-                      "dateTaken",
-                      e.target.value
-                    );
-                  }}
-                ></textarea>
+                <input
+                  type="text"
+                  className="table-input"
+                  onChange={(e) => setCommentary(e.target.value)}
+                ></input>
               </div>
-
               <div>
-                <IconButton onClick={(e) => handleDelete(e, inventoryItem.id)}>
-                  <RemoveCircleIcon className="circleRemove"></RemoveCircleIcon>
+                <IconButton onClick={(e) => handleCreate(e)}>
+                  <AddCircleIcon className="circleAdd"></AddCircleIcon>
                 </IconButton>
               </div>
+            </form>
+          </div>
+          <input type="submit" value="Добавить" className="button"></input>
+        </>
+      )}
+      {filteredItems.length > 0 ? (
+        <div className="headings-first">
+          <div>Id</div>
+          <div>Наименование</div>
+        </div>
+      ) : null}
+      {filteredItems.map((item, idx) => (
+        <>
+          <div className="table">
+            <div className="headings">
+              <div>Id</div>
+              <div>Наименование</div>
+            </div>
+            <div className="contents">
+              <div>{item.id}</div>
+              <div>{item.name}</div>
             </div>
           </div>
         </>

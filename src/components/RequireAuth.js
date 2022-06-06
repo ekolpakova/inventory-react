@@ -1,5 +1,6 @@
 import { useLocation, Navigate, Outlet } from "react-router-dom";
 import useAuth from "../hooks/useAuth";
+import Guest from "./Guest";
 import SignIn from "./SignIn";
 
 const RequireAuth = ({ roles }) => {
