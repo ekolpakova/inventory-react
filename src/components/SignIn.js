@@ -26,9 +26,9 @@ const SignIn = () => {
 
   //const tableRef = useRef(null);
 
-  const handleLogin = async (e, username, password) => {
+  /*const handleLogin = async (e, username, password) => {
     e.preventDefault();
-    const api = `https://inventory-spring-postgres.herokuapp.com`;
+    const api = `https://inventory-spring-postgres.herokuapp.com/api/v1/public/signIn`;
     const res = await axios.get(api, {
       withCredentials: true,
       params: {
@@ -53,6 +53,36 @@ const SignIn = () => {
 
     if (res) {
       console.log("User has signed in");
+    }
+  };*/
+
+  const handleLogin = async (e, username, password) => {
+    e.preventDefault();
+    const api = `https://inventory-spring-postgres.herokuapp.com/api/v1/public/tests`;
+    const res = await axios.get(api, {
+      withCredentials: true,
+      params: {
+        username: username,
+        password: password,
+      },
+    });
+    const data = await res.data;
+
+    //const accessToken = data["access_token"];
+    //const roles = data["roles"][0];
+    //const id = data["id"];
+    //const usernameDb = data["username"];
+
+    //localStorage.setItem("roles", roles);
+    //setAuth({ accessToken });
+    //setAuth({ roles });
+    //setAuth({ id });
+    //setAuth({ usernameDb });
+
+    //navigate(from, { replace: true });
+
+    if (data) {
+      console.log(data);
     }
   };
 

@@ -13,23 +13,23 @@ export const useGetNewAccessToken = () => {
 
     const data = await res.data;
 
-    const roles = data["roles"][0];
+    //const roles = data["roles"][0];
 
     setAuth({ roles });
 
     setAuth((prev) => {
       console.log(JSON.stringify(prev));
-      console.log(data["access_token"]);
+      //console.log(data["access_token"]);
       return {
         ...prev,
-        accessToken: data["access_token"],
-        roles: data["roles"][0],
-        id: data["id"],
-        username: data["username"]
+        //accessToken: data["access_token"],
+        //roles: data["roles"][0],
+        //id: data["id"],
+        //username: data["username"]
       };
     });
 
-    return data["access_token"], data["roles"][0], data["id"]
+    //return data["access_token"], data["roles"][0], data["id"]
   };
   return refresh;
 };
