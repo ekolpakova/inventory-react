@@ -28,7 +28,7 @@ const SignIn = () => {
 
   const handleLogin = async (e, username, password) => {
     e.preventDefault();
-    const api = `https://inventory-spring-postgres.herokuapp.com/api/v1/public/signIn?username=${username}&password=${password}`;
+    const api = `https://inventory-spring-postgres.herokuapp.com`;
     const res = await axios.get(api, {
       withCredentials: true,
       params: {
