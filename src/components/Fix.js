@@ -5,6 +5,10 @@ import useGet from "../hooks/useGet";
 import useAuth from "../hooks/useAuth";
 import useSetInterceptors from "../hooks/useSetInterceptors";
 
+import { IconButton } from "@material-ui/core";
+import AddCircleIcon from "@mui/icons-material/AddCircle";
+import RemoveCircleIcon from "@mui/icons-material/RemoveCircle";
+
 const Fix = () => {
     const { handleUpdate, handleDropdown } = useUpdate();
     const [fixes, setFixes] = useState([]);
@@ -43,6 +47,10 @@ const Fix = () => {
     };
   });
 
+  const handleAddFix = () => {
+
+  }
+
     return <div className="main">
         <h1>Акт передачи оборудования в ремонт</h1>
         <div className="wrapper">
@@ -51,6 +59,7 @@ const Fix = () => {
                 <div>Описание поломки</div>
                 <div>Ответственное лицо</div>
                 <div>Контактный телефон</div>
+                <div>Действие</div>
             </div>
             <div className="table">
             <div className="headings">
@@ -58,21 +67,50 @@ const Fix = () => {
                 <div>Описание поломки</div>
                 <div>Ответственное лицо</div>
                 <div>Контактный телефон</div>
+                <div>Действие</div>
             </div>
             { fixes.map((fix) => 
             fix.inventoryItems.map((item) => <div className="contents">
-                <div>
+                <div contentEditable="true">
                    {item.name}
                 </div>
-                <div>{fix.description}</div>
+                <div contentEditable="true">{fix.description}</div>
                 <div>
                     {fix.responsiblePerson}
                 </div>
-                <div>{fix.phone}</div>
+                <div contentEditable="true" onDoubleClick={(e) => handleUpdate(e, fix.id, "phone", e.target.innerText)}>{fix.phone}</div>
+                <div>
+                  <IconButton>
+                    <RemoveCircleIcon className="circleRemove"></RemoveCircleIcon>
+                  </IconButton>
+                </div>
             </div> ))
             }
            
         </div>
+
+        <div className="table">
+              <div className="headings">
+                <div>Наименование</div>
+                <div>Описание поломки</div>
+                <div>Ответственное лицо</div>
+                <div>Контактный телефон</div>
+                <div>Действие</div>
+              </div>
+
+              <form id="addForm" className="contents">
+                <div><select className="dropdown"><option>1</option></select></div>
+                <div contentEditable="true" onChange={() => handleAddFix()}></div>
+                <div><select className="dropdown"><option>2</option></select></div>
+                <div contentEditable="true"></div>
+                <div>
+                  <IconButton>
+                    <AddCircleIcon className="circleAdd"></AddCircleIcon>
+                  </IconButton>
+                </div>
+              </form>
+            </div>
+
         </div>
     </div>
 };
