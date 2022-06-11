@@ -27,22 +27,22 @@
 }
 
 .icon-checkbox:before {
-  content: "\\e900";
+  content: "\e900";
 }
 .icon-filter:before {
-  content: "\\e901";
+  content: "\e901";
 }
 .icon-right-arrow:before {
-  content: "\\e902";
+  content: "\e902";
 }
 .icon-round-cancel:before {
-  content: "\\e903";
+  content: "\e903";
 }
 .icon-search:before {
-  content: "\\e904";
+  content: "\e904";
 }
 .icon-plus:before {
-  content: "\\e905";
+  content: "\e905";
 }
 
 *,
@@ -240,22 +240,22 @@ input:focus {
 }
 
 .icon-checkbox:before {
-  content: "\\e900";
+  content: "\e900";
 }
 .icon-filter:before {
-  content: "\\e901";
+  content: "\e901";
 }
 .icon-right-arrow:before {
-  content: "\\e902";
+  content: "\e902";
 }
 .icon-round-cancel:before {
-  content: "\\e903";
+  content: "\e903";
 }
 .icon-search:before {
-  content: "\\e904";
+  content: "\e904";
 }
 .icon-plus:before {
-  content: "\\e905";
+  content: "\e905";
 }
 
 *,

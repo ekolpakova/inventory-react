@@ -14,6 +14,8 @@ import InventoryByClassrooms from "./components/InventoryByClassrooms";
 import Select from "./components/Select";
 import Profile from "./components/Profile";
 import Documents from "./components/Documents";
+import Fix from "./components/Fix";
+import BelongsTo from "./components/BelongsTo";
 
 const ROLES = {
   ADMIN: "ADMIN",
@@ -34,6 +36,8 @@ const App = () => {
         <Route element={<RememberMe />}>
           <Route element={<RequireAuth roles={["MODERATOR"]} />}>
             <Route path="inventory" element={<Inventory />}></Route>
+            <Route path="fixes" element={<Fix />}>Ремонт</Route>
+            <Route path="belongsTo" element={<BelongsTo />}>Принадлежность оборудования</Route>
             <Route
               path="classrooms"
               element={<InventoryByClassrooms />}

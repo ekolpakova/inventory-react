@@ -58,7 +58,7 @@ const SignIn = () => {
 
   const handleLogin = async (e, username, password) => {
     e.preventDefault();
-    const api = `https://inventory-spring-postgres.herokuapp.com/api/v1/public/tests`;
+    const api = `http://localhost:8080/api/v1/public/signIn`;
     const res = await axios.get(api, {
       withCredentials: true,
       params: {
@@ -68,16 +68,16 @@ const SignIn = () => {
     });
     const data = await res.data;
 
-    //const accessToken = data["access_token"];
-    //const roles = data["roles"][0];
-    //const id = data["id"];
-    //const usernameDb = data["username"];
+    const accessToken = data["access_token"];
+    const roles = data["roles"][0];
+    const id = data["id"];
+    const usernameDb = data["username"];
 
     //localStorage.setItem("roles", roles);
-    //setAuth({ accessToken });
-    //setAuth({ roles });
-    //setAuth({ id });
-    //setAuth({ usernameDb });
+    setAuth({ accessToken });
+    setAuth({ roles });
+    setAuth({ id });
+    setAuth({ usernameDb });
 
     //navigate(from, { replace: true });
 
