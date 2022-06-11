@@ -1,6 +1,15 @@
-
+import axios from "axios";
+import { useEffect, useState } from "react";
+import useUpdate from "../hooks/useUpdate";
 
 const Fix = () => {
+    const { handleUpdate, handleDropdown } = useUpdate();
+    const [fixes, setFixes] = useState([]);
+
+    useEffect(() => {
+        
+    });
+
     return <div className="main">
         <h1>Акт передачи оборудования в ремонт</h1>
         <div className="wrapper">
@@ -19,7 +28,12 @@ const Fix = () => {
             </div>
             <div className="contents">
                 <div>
-                    <select className="dropdown">
+                    <select className="dropdown" onChange={(e) =>
+                          handleDropdown(
+                            `http://localhost:8080/api/v1/moderator/inventoryDTO/`,
+                            e.target.value
+                          )
+                        }>
                         <option>1</option>
                     </select>
                 </div>
