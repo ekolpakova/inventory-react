@@ -271,9 +271,9 @@ const Inventory = (props) => {
         const api = `http://localhost:8080/api/v1/moderator/inventory`;
 
         const res = await setInterceptors.get(api, {
-          /*headers: {
-            Authorization: `Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJsaXNhIiwiYXV0aG9yaXRpZXMiOlt7ImF1dGhvcml0eSI6Ik1PREVSQVRPUiJ9LHsiYXV0aG9yaXR5IjoiUkVBREVSIn0seyJhdXRob3JpdHkiOiJVU0VSUzpSRUFEIn0seyJhdXRob3JpdHkiOiJVU0VSUzpVUERBVEUifSx7ImF1dGhvcml0eSI6IlVTRVJTOldSSVRFIn1dLCJyb2xlcyI6WyJNT0RFUkFUT1IiLCJSRUFERVIiLCJVU0VSUzpSRUFEIiwiVVNFUlM6VVBEQVRFIiwiVVNFUlM6V1JJVEUiXSwiaWF0IjoxNjUzNDk4NjMyLCJleHAiOjE2NTM0OTg5MzJ9.LuzBJsnxOQ2SYUgho6Y_uqkBxelVsuJ5JJmGunBfsDY`,
-          },*/
+          headers: {
+            Authorization: `Bearer ${auth.accessToken}`,
+          },
           signal: controller.signal,
         });
 
@@ -282,7 +282,6 @@ const Inventory = (props) => {
         console.log(data);
       } catch (err) {
         console.log(err);
-        //navigate("/signIn", { state: { from: location }, replace: true });
       }
     };
 

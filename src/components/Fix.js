@@ -1,14 +1,47 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import useUpdate from "../hooks/useUpdate";
+import useGet from "../hooks/useGet";
+import useAuth from "../hooks/useAuth";
+import useSetInterceptors from "../hooks/useSetInterceptors";
 
 const Fix = () => {
     const { handleUpdate, handleDropdown } = useUpdate();
     const [fixes, setFixes] = useState([]);
+    const { get } = useGet();
+    const { auth } = useAuth();
+    const setInterceptors = useSetInterceptors();
+    
+  useEffect(() => {
+    let isMounted = true;
+    const controller = new AbortController();
 
-    useEffect(() => {
-        
-    });
+    const getFixes = async () => {
+      try {
+        const api = `http://localhost:8080/api/v1/moderator/fixes`;
+
+        const res = await setInterceptors.get(api, {
+          headers: {
+            Authorization: `Bearer ${auth.accessToken}`,
+          },
+          signal: controller.signal,
+        });
+
+        const data = await res.data;
+        isMounted && setFixes(data);
+        console.log(data);
+      } catch (err) {
+        console.log(err);
+      }
+    };
+
+    getFixes();
+
+    return () => {
+      isMounted = false;
+      controller.abort();
+    };
+  });
 
     return <div className="main">
         <h1>Акт передачи оборудования в ремонт</h1>
@@ -26,25 +59,19 @@ const Fix = () => {
                 <div>Ответственное лицо</div>
                 <div>Контактный телефон</div>
             </div>
-            <div className="contents">
+            { fixes.map((fix) => 
+            fix.inventoryItems.map((item) => <div className="contents">
                 <div>
-                    <select className="dropdown" onChange={(e) =>
-                          handleDropdown(
-                            `http://localhost:8080/api/v1/moderator/inventoryDTO/`,
-                            e.target.value
-                          )
-                        }>
-                        <option>1</option>
-                    </select>
+                   {item.name}
                 </div>
-                <div>Описание</div>
+                <div>{fix.description}</div>
                 <div>
-                    <select className="dropdown">
-                        <option>А.А. Афанасьева</option>
-                    </select>
+                    {fix.responsiblePerson}
                 </div>
-                <div>123456789</div>
-            </div>
+                <div>{fix.phone}</div>
+            </div> ))
+            }
+           
         </div>
         </div>
     </div>
