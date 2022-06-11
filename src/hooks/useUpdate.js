@@ -4,11 +4,11 @@ import useAuth from "./useAuth";
 const useUpdate = () => {
     const setInterceptors = useSetInterceptors();
     const { auth } = useAuth();
-    
-    const handleUpdate = async (e, id, col, colVal) => {
+
+    const handleUpdate = async (e, api, id, col, colVal) => {
         e.preventDefault();
         console.log("id", id);
-        const api = `http://localhost:8080/api/v1/moderator/updateInventoryItemCell`;
+        //const api = `http://localhost:8080/api/v1/moderator/updateInventoryItemCell`;
         const res = await setInterceptors.put(api, null, {
           params: {
             id: id,

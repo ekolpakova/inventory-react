@@ -516,6 +516,7 @@ const Inventory = (props) => {
                         </select>
                       )}
                     </div>
+                    <div></div>
                     <div>{i?.responsiblePerson?.username}</div>
                     <div>
                       {" "}

@@ -74,11 +74,11 @@ const Fix = () => {
                 <div contentEditable="true">
                    {item.name}
                 </div>
-                <div contentEditable="true">{fix.description}</div>
+                <div contentEditable="true" onDoubleClick={(e) => handleUpdate(e, "http://localhost:8080/api/v1/moderator/updateFixCell", fix.id, "description", e.target.innerText)}>{fix.description}</div>
                 <div>
                     {fix.responsiblePerson}
                 </div>
-                <div contentEditable="true" onDoubleClick={(e) => handleUpdate(e, fix.id, "phone", e.target.innerText)}>{fix.phone}</div>
+                <div contentEditable="true" onDoubleClick={(e) => handleUpdate(e, "http://localhost:8080/api/v1/moderator/updateFixCell", fix.id, "phone", e.target.innerText)}>{fix.phone}</div>
                 <div>
                   <IconButton>
                     <RemoveCircleIcon className="circleRemove"></RemoveCircleIcon>
