@@ -106,8 +106,9 @@ const SignIn = () => {
                     className="text"
                     placeholder="Имя пользователя"
                     onChange={(e) => setUsername(e.target.value)}
-                  ></input>
-                </div>
+                  >
+                  </input>
+                </div><p>8 to 24</p>
                 <div className="input-Container">
                   <i>{<LockIcon />}</i>
                   <input

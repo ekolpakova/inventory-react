@@ -291,7 +291,7 @@ const Inventory = (props) => {
       isMounted = false;
       controller.abort();
     };
-  });
+  }, []);
 
   const handleDelete = async (e, key) => {
     e.preventDefault();

@@ -34,7 +34,7 @@ const App = () => {
         <Route path="select" element={<Select />}></Route>
 
         <Route element={<RememberMe />}>
-          <Route element={<RequireAuth roles={["MODERATOR"]} />}>
+          <Route element={<RequireAuth roles={["MODERATOR", "READER"]} />}>
             <Route path="inventory" element={<Inventory />}></Route>
             <Route path="fixes" element={<Fix />}>Ремонт</Route>
             <Route path="belongsTo" element={<BelongsTo />}>Принадлежность оборудования</Route>

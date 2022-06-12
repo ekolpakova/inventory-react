@@ -16,9 +16,12 @@ const Fix = () => {
   const [items, setItems] = useState([]);
   const [users, setUsers] = useState([]);
 
-  const [item, setItem] = useState({});
-  const [user, setUser] = useState({});
+  const [item, setItem] = useState();
+  const [user, setUser] = useState();
   const [fix, setFix] = useState({});
+
+  const [desc, setDesc] = useState("");
+  const [phone, setPhone] = useState("");
 
   const { get } = useGet();
   const { auth } = useAuth();
@@ -53,7 +56,7 @@ const Fix = () => {
       isMounted = false;
       controller.abort();
     };
-  });
+  }, []);
 
   useEffect(() => {
     let isMounted = true;
@@ -84,7 +87,7 @@ const Fix = () => {
       isMounted = false;
       controller.abort();
     };
-  });
+  }, []);
 
   useEffect(() => {
     let isMounted = true;
@@ -115,31 +118,38 @@ const Fix = () => {
       isMounted = false;
       controller.abort();
     };
-  });
+  }, []);
 
-  const handleCreate = async (e, itemId, fix) => {
+  const handleFileDownload = async (e) => {
     e.preventDefault();
-    const api = `http://localhost:8080/api/v1/moderator/inventory/fix/${itemId}`;
-    const json = JSON.stringify({
-      fix: fix
-    });
-    const res = await setInterceptors.post(api, json, {
+    const api = "http://localhost:8080/api/v1/moderator/createTable";
+    const res = axios.get(api, {
       headers: {
-        "Content-Type": "application/json",
-      },
-    });
-
-    const data = await res.data;
-
-    setFixes((prev) => [...prev, data]);
-
-    if (res) {
-      console.log("Item was created");
-      alert("Item was created");
-    }
+        Authorization: `Bearer ${auth.accessToken}`
+      }
+    })
   };
 
-  const handleAddFix = () => {};
+
+  const handleAddFix = (e) => {
+    e.preventDefault();
+    const api = "http://localhost:8080/api/v1/moderator/addFix";
+    const json = JSON.stringify({
+      description: desc,
+      phone: phone
+    });
+    const res = setInterceptors.post(api, json, {
+      params: {
+        userId: user,
+        itemId: item
+      },
+      headers: {
+        Authorization: `Bearer ${auth.accessToken}`
+      }
+    })
+
+    if(res) console.log("Item was added")
+  };
 
   return (
     <div className="main">
@@ -152,18 +162,19 @@ const Fix = () => {
           <div>Контактный телефон</div>
           <div>Действие</div>
         </div>
-        <div className="table">
-          <div className="headings">
-            <div>Наименование</div>
-            <div>Описание поломки</div>
-            <div>Ответственное лицо</div>
-            <div>Контактный телефон</div>
-            <div>Действие</div>
-          </div>
+        
           {fixes.map((fix) =>
-            fix.inventoryItems.map((item) => (
+              <div className="table">
+              <div className="headings">
+                <div>Наименование</div>
+                <div>Описание поломки</div>
+                <div>Ответственное лицо</div>
+                <div>Контактный телефон</div>
+                <div>Действие</div>
+              </div>  
               <div className="contents">
-                <div contentEditable="true">{item.name}</div>
+                { fix.inventoryItem !== null && <div contentEditable="true">{fix.inventoryItem.name}</div>}
+                { fix.inventoryItem === null && <div contentEditable="true"></div>}
                 <div
                   contentEditable="true"
                   onChange={(e) => setFix(e.target.value)}
@@ -179,7 +190,7 @@ const Fix = () => {
                 >
                   {fix.description}
                 </div>
-                <div>{fix.responsiblePerson}</div>
+                <div onChange={(e) => setUser(e.target.innerText)}>{fix.responsiblePerson.username}</div>
                 <div
                   contentEditable="true"
                   onDoubleClick={(e) =>
@@ -200,9 +211,9 @@ const Fix = () => {
                   </IconButton>
                 </div>
               </div>
-            ))
-          )}
-        </div>
+              </div>
+            )
+          }
 
         <div className="table">
           <div className="headings">
@@ -219,21 +230,33 @@ const Fix = () => {
                 { items.map((item) => <option value={item.id}>{item.name}</option>) }
               </select>
             </div>
-            <div contentEditable="true" onChange={() => handleAddFix()}></div>
+            <div><input
+        type="text"
+        value={desc}
+        onChange={(e) => setDesc(e.target.value)}
+        
+      ></input></div>
+            
             <div>
               <select className="dropdown" onChange={(e) => setUser(e.target.value)}>
                 { users.map((user) => <option value={user.id}>{user.username}</option> ) }
               </select>
             </div>
-            <div contentEditable="true"></div>
+            <div>     <input
+        type="text"
+        value={phone}
+        onChange={(e) => setPhone(e.target.value)}
+      ></input></div>
+       
             <div>
-              <IconButton onClick={(e) => handleCreate(e, { id: item.id }, { description: fix })}>
+              <IconButton onClick={(e) => handleAddFix(e)}>
                 <AddCircleIcon className="circleAdd"></AddCircleIcon>
               </IconButton>
             </div>
           </form>
         </div>
       </div>
+      <button className="button" style={{ marginTop: '1rem' }} onClick={(e) => handleFileDownload(e)}>Скачать</button>
     </div>
   );
 };
