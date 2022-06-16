@@ -17,6 +17,7 @@ import { Select } from "@mui/material";
 const Inventory = (props) => {
   const [inventoryItems, setInventoryItems] = useState([]);
   const [filteredItems, setFilteredItems] = useState([]);
+  const [disabled, setDisabled] = useState(false);
   const [inventoryItem, setInventoryItem] = useState("");
   const prevInventoryItem = useRef("");
 
@@ -52,6 +53,13 @@ const Inventory = (props) => {
   const [value, setValue] = useState("");
 
   const prevInventoryItems = useRef([]);
+
+  useEffect(() => {
+    {auth?.roles
+      ?.map((role) => role.name)
+      .find((role) => props?.roles.includes(role)) 
+      ? setDisabled(true) : setDisabled(false)}
+  }, []);
 
   const [values, setValues] = React.useState({
     amount: "",
@@ -370,7 +378,7 @@ const Inventory = (props) => {
               <div>Комментарий</div>
               <div>Комментарий А.М.Чернега</div>
               <div>Дата принятия к учёту</div>
-              <div>Действие</div>
+              {disabled && <div>Действие</div>}
             </div>
 
             {inventoryItems.map((inventoryItem, idx) => (
@@ -383,7 +391,7 @@ const Inventory = (props) => {
                   <div>Комментарий</div>
                   <div>Комментарий А.М.Чернега</div>
                   <div>Дата принятия к учёту</div>
-                  <div>Действие</div>
+                  {disabled && <div>Действие</div>}
                 </div>
 
                 <div className="contents">
@@ -549,10 +557,9 @@ const Inventory = (props) => {
                 <div>Характеристики</div>
                 <div>Комментарий</div>
                 <div>Комментарий А.М.Чернега</div>
-                <div>Действие</div>
-              </div>
-
-              <form id="addForm" className="contents">
+                {disabled && <div>Действие</div>}
+              </div>                  
+              { disabled && <form id="addForm" className="contents">
                 <div>
                   <input
                     type="text"
@@ -613,7 +620,8 @@ const Inventory = (props) => {
                     <AddCircleIcon className="circleAdd"></AddCircleIcon>
                   </IconButton>
                 </div>
-              </form>
+              </form>}        
+             
             </div>
 
             <div>
@@ -652,7 +660,7 @@ const Inventory = (props) => {
           <div>Комментарий</div>
           <div>Комментарий А.М.Чернега</div>
           <div>Дата принятия к учёту</div>
-          <div>Действие</div>
+          {disabled && <div>Действие</div>}
         </div>
       ) : null}
       {filteredItems.map((inventoryItem, idx) => (
@@ -666,12 +674,12 @@ const Inventory = (props) => {
               <div>Комментарий</div>
               <div>Комментарий А.М.Чернега</div>
               <div>Дата принятия к учёту</div>
-              <div>Действие</div>
+              {disabled && <div>Действие</div>}
             </div>
             <div className="contents">
               <div>
                 <textarea
-                  defaultValue={inventoryItem.id}
+                  defaultValue={idx}
                   onChange={(e) => {
                     setInventoryItem(e.target.value);
                   }}
@@ -798,11 +806,12 @@ const Inventory = (props) => {
                 ></textarea>
               </div>
 
-              <div>
+               {disabled && <div style={{ textAlign: 'center' }}>
                 <IconButton onClick={(e) => handleDelete(e, inventoryItem.id)}>
                   <RemoveCircleIcon className="circleRemove"></RemoveCircleIcon>
                 </IconButton>
-              </div>
+              </div> }   
+            
             </div>
           </div>
         </>

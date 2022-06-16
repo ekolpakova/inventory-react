@@ -8,6 +8,7 @@ import useSetInterceptors from "../hooks/useSetInterceptors";
 import { IconButton } from "@material-ui/core";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
 import RemoveCircleIcon from "@mui/icons-material/RemoveCircle";
+import DownloadIcon from '@mui/icons-material/Download';
 
 const Fix = () => {
   const { handleUpdate, handleDropdown } = useUpdate();
@@ -207,7 +208,7 @@ const Fix = () => {
                 </div>
                 <div>
                   <IconButton>
-                    <RemoveCircleIcon className="circleRemove"></RemoveCircleIcon>
+                    <DownloadIcon className="download"></DownloadIcon>
                   </IconButton>
                 </div>
               </div>
@@ -230,7 +231,7 @@ const Fix = () => {
                 { items.map((item) => <option value={item.id}>{item.name}</option>) }
               </select>
             </div>
-            <div><input
+            <div><input style={{ font: 'inherit', borderRadius: '0.5rem', border: '1px solid #c2c2c2', padding: '0.5rem 1rem' }}
         type="text"
         value={desc}
         onChange={(e) => setDesc(e.target.value)}
@@ -242,7 +243,7 @@ const Fix = () => {
                 { users.map((user) => <option value={user.id}>{user.username}</option> ) }
               </select>
             </div>
-            <div>     <input
+            <div>     <input style={{ font: 'inherit', borderRadius: '0.5rem', border: '1px solid #c2c2c2', padding: '0.5rem 1rem' }}
         type="text"
         value={phone}
         onChange={(e) => setPhone(e.target.value)}

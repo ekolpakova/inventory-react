@@ -609,8 +609,12 @@ ul li {
 .circleRemove {
   fill: #e12a36 !important;
 }
+.download {
+  fill:#0026ab !important;
+}
 .circleAdd,
-.circleRemove {
+.circleRemove,
+.download {
   transform: scale(1.3);
 }
 

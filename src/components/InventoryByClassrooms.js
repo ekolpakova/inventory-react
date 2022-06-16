@@ -97,6 +97,7 @@ const InventoryByClassrooms = () => {
           style={{
             display: "grid",
             gridTemplateColumns: "repeat(2,1fr)",
+            gridAutoRows: "50px",
             gap: "0.5rem",
           }}
         >
@@ -126,10 +127,8 @@ const InventoryByClassrooms = () => {
         </div>
 
         <div
-          style={{
-            backgroundColor: "aliceblue",
-            padding: "1rem",
-          }}
+          
+        
         >
           {classnum === undefined && (
             <div>Выберите аудиторию для просмотра оборудования</div>
@@ -140,6 +139,7 @@ const InventoryByClassrooms = () => {
               display: "grid",
               gridAutoFlow: "column",
               gridTemplateColumns: "150px 1fr",
+              maxWidth: "800px"
             }}
           >
             <form onSubmit={(e) => handleFilter(e, param, value)}>
@@ -181,7 +181,8 @@ const InventoryByClassrooms = () => {
                   gridTemplateColumns: "repeat(3, 1fr)",
                   backgroundColor: "aliceblue",
                   borderRadius: "0.5rem",
-                  maxWidth: "700px",
+                  padding: "0.5rem 1rem",
+                  gap: "2rem"
                 }}
               >
                 {classroom.name === classnum &&

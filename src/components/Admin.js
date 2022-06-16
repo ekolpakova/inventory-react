@@ -61,6 +61,9 @@ const Admin = () => {
 
         const res = await setInterceptors.get(api, {
           signal: controller.signal,
+          headers: {
+        Authorization: `Bearer ${auth.accessToken}`,
+      },
         });
 
         const data = await res.data;

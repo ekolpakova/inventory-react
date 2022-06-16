@@ -1,7 +1,7 @@
 
 
 const Welcome = () => {
-    return (<div>Welcome!</div>)
+    return (<div className="main"><h1>Добро пожаловать!</h1></div>)
 };
 
 export default Welcome;
