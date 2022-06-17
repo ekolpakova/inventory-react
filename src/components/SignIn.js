@@ -3,10 +3,9 @@ import { useAuth } from "../context/AuthProvider";
 import { useNavigate, useLocation, Link } from "react-router-dom";
 import axios from "axios";
 
-import PersonIcon from "@mui/icons-material/Person";
-import LockIcon from "@mui/icons-material/Lock";
 
 import img from "../images/code.jpg";
+import { hover } from "@testing-library/user-event/dist/hover";
 
 const SignIn = () => {
   const { setAuth, rememberMe, setRememberMe } = useAuth();
@@ -16,6 +15,14 @@ const SignIn = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
+  const [usernameClicked, setUsernameClicked] = useState(false);
+  const [passwordClicked, setPasswordClicked] = useState(false);
+
+  const [usernameError, setUsernameError] = useState("Логин не может быть пустым");
+  const [passwordError, setPasswordError] = useState("Пароль не может быть пустым");
+
+  const [formValid, setFormValid] = useState(false);
+
   const toggleRememberMe = () => {
     setRememberMe((prev) => !prev);
   };
@@ -24,39 +31,7 @@ const SignIn = () => {
     localStorage.setItem("rememberMe", rememberMe);
   }, [rememberMe]);
 
-  //const tableRef = useRef(null);
-
-  /*const handleLogin = async (e, username, password) => {
-    e.preventDefault();
-    const api = `https://inventory-spring-postgres.herokuapp.com/api/v1/public/signIn`;
-    const res = await axios.get(api, {
-      withCredentials: true,
-      params: {
-        username: username,
-        password: password,
-      },
-    });
-    const data = await res.data;
-
-    const accessToken = data["access_token"];
-    const roles = data["roles"][0];
-    const id = data["id"];
-    const usernameDb = data["username"];
-
-    localStorage.setItem("roles", roles);
-    setAuth({ accessToken });
-    setAuth({ roles });
-    setAuth({ id });
-    setAuth({ usernameDb });
-
-    //navigate(from, { replace: true });
-
-    if (res) {
-      console.log("User has signed in");
-    }
-  };*/
-
-  const handleLogin = async (e, username, password) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
     const api = `http://localhost:8080/api/v1/public/signIn`;
     const res = await axios.get(api, {
@@ -73,18 +48,61 @@ const SignIn = () => {
     const id = data["id"];
     const usernameDb = data["username"];
 
-    //localStorage.setItem("roles", roles);
     setAuth({ accessToken });
     setAuth({ roles });
     setAuth({ id });
     setAuth({ usernameDb });
 
-    //navigate(from, { replace: true });
-
     if (data) {
       console.log(data);
     }
   };
+
+  const clickHandler = (e) => {
+    switch (e.target.name) {
+      case 'username':
+        setUsernameClicked(true)
+        break
+      case 'password':
+        setPasswordClicked(true)  
+        break
+    }
+  }
+
+  const usernameHandler = (e) => {
+    setUsername(e.target.value)
+    const re = /([A-Za-z0-9])\w+/
+    if(!re.test(String(e.target.value).toLowerCase())) {
+      setUsernameError("Логин должен содержать только цифры и буквы английского алфавита")
+      if(!e.target.value) {
+        setPasswordError("Логин не может быть пустым")
+      }
+    } else {
+      setUsernameError("")
+    }
+  }
+
+  const passwordHandler = (e) => {
+    setPassword(e.target.value)
+    if(e.target.value.length < 4) { 
+      setPasswordError("Пароль должен содержать не меньше 4 символов"); 
+      if(!e.target.value) {
+        setPasswordError("Пароль не может быть пустым")
+      }
+   }
+   else {
+    setPasswordError("")
+   }
+  }
+
+  useEffect(() => {
+    if (usernameError || passwordError) {
+      setFormValid(false)
+    }
+    else {
+      setFormValid(true)
+    }
+  }, [usernameError, passwordError])
 
   return (
     <>
@@ -96,30 +114,34 @@ const SignIn = () => {
           <div>
             <h1>Вход</h1>
             <div className="form-container">
-              <form onSubmit={(e) => handleLogin(e, username, password)}>
+              <form onSubmit={(e) => handleLogin(e)}>
                 <div className="input-Container">
-                  <i>{<PersonIcon />}</i>
+                  <i></i>
                   <input
                     type="text"
-                    name=""
+                    name="username"
                     value={username}
                     className="text"
                     placeholder="Имя пользователя"
-                    onChange={(e) => setUsername(e.target.value)}
+                    onChange={(e) => usernameHandler(e)}
+                    onClick={(e) => clickHandler(e)}
                   >
                   </input>
-                </div><p>8 to 24</p>
+                </div>
+               {(usernameClicked && usernameError) && <div style={{ color: 'red'}}>{usernameError}</div>}
                 <div className="input-Container">
-                  <i>{<LockIcon />}</i>
+                  <i></i>
                   <input
                     type="password"
-                    name=""
+                    name="password"
                     value={password}
                     className="text"
                     placeholder="Пароль"
-                    onChange={(e) => setPassword(e.target.value)}
+                    onChange={(e) => passwordHandler(e)}
+                    onClick={(e) => clickHandler(e)}
                   ></input>
                 </div>
+                {(passwordClicked && passwordError) && <div style={{ color: 'red'}}>{passwordError}</div>}
                 <div className="remember-me-container">
                   <div>
                     <label htmlFor="remember-me">Запомнить меня</label>
@@ -134,6 +156,7 @@ const SignIn = () => {
                     ></input>
                   </div>
                   <input
+                    disabled={!formValid}
                     type="submit"
                     name=""
                     value="Войти"
@@ -152,21 +175,6 @@ const SignIn = () => {
   );
 };
 
-export const getJwtToken = () => {
-  localStorage.getItem("jwt");
-};
-
-export const setJwtToken = (token) => {
-  localStorage.setItem("jwt", token);
-};
-
-export const getRefreshToken = () => {
-  localStorage.getItem("refreshToken");
-};
-
-export const setRefreshToken = (token) => {
-  localStorage.setItem("refreshToken", token);
-};
 
 SignIn.propTypes = {};
 

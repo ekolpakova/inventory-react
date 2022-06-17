@@ -8,9 +8,6 @@ import useGetNewAccessToken from "../hooks/useGetNewAccessToken";
 import useAuth from "../hooks/useAuth";
 import "../index.css";
 
-import RemoveCircleIcon from "@mui/icons-material/RemoveCircle";
-import { IconButton } from "@material-ui/core";
-import AddCircleIcon from "@mui/icons-material/AddCircle";
 import { Select } from "@mui/material";
 
 //Потестить интерцептор реквеста здесь - должен автоматически передать в реквест токен
@@ -185,37 +182,6 @@ const Inventory = (props) => {
     }
   };
 
-  /*const handleUpdate = async (e, id, name) => {
-    e.preventDefault();
-    const arr = [...inventoryItems];
-    arr[id][name] = inventoryItem;
-    setInventoryItems(arr);
-    console.log(arr);
-
-    await handleDbUpdate(id, name, inventoryItem);
-
-    /*console.log(1);
-    setTodos((prev) =>
-      prev.map((item) => (item.key === key ? { ...item, name: "Jake" } : item))
-    );
-  };
-  */
-
-  const handleChang = (e, key) => {
-    e.preventDefault();
-    console.log("Test II");
-    //setIsEditable(true);
-
-    setInventoryItems(
-      (prev) => console.log(prev)
-      /*{ 
-      inventoryItems: prev.inventoryItems.map((item) =>
-        item.key === key ? { ...item, name: "Дом Периньон" } : item
-      ),
-    }*/
-    );
-  };
-
   const handleUpdate = async (e, id, col, colVal) => {
     e.preventDefault();
     const api = `http://localhost:8080/api/v1/moderator/updateInventoryItemCell`;
@@ -255,7 +221,6 @@ const Inventory = (props) => {
         const data = await res.data;
         console.log(data);
         isMounted && setCategories(data);
-        //setCategories(data);
         console.log(data);
       } catch (err) {
         console.log(err);
@@ -359,7 +324,6 @@ const Inventory = (props) => {
                 name="search"
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
-                //onDoubleClick={(e) => handleSearch(e)}
                 placeholder="Поиск по словам..."
               ></input>
             </div>
@@ -538,11 +502,11 @@ const Inventory = (props) => {
                   </div>
 
                   <div>
-                    <IconButton
+                    <button
                       onClick={(e) => handleDelete(e, inventoryItem.id)}
                     >
-                      <RemoveCircleIcon className="circleRemove"></RemoveCircleIcon>
-                    </IconButton>
+                      
+                    </button>
                   </div>
                 </div>
               </div>
@@ -616,9 +580,9 @@ const Inventory = (props) => {
                   ></input>
                 </div>
                 <div>
-                  <IconButton onClick={(e) => handleCreate(e)}>
-                    <AddCircleIcon className="circleAdd"></AddCircleIcon>
-                  </IconButton>
+                  <button onClick={(e) => handleCreate(e)}>
+                   
+                  </button>
                 </div>
               </form>}        
              
@@ -639,12 +603,6 @@ const Inventory = (props) => {
           </div>
         </div>
       ) : (
-        /*<div>
-          {inventoryItems.map((inventoryItem, i) => (
-            <div key={i}>{inventoryItem.specs}</div>
-          ))}
-        </div>*/
-
         <>
           {filteredItems.map((item) => {
             <div>{item.name}</div>;
@@ -807,9 +765,9 @@ const Inventory = (props) => {
               </div>
 
                {disabled && <div style={{ textAlign: 'center' }}>
-                <IconButton onClick={(e) => handleDelete(e, inventoryItem.id)}>
-                  <RemoveCircleIcon className="circleRemove"></RemoveCircleIcon>
-                </IconButton>
+                <button onClick={(e) => handleDelete(e, inventoryItem.id)}>
+                  
+                </button>
               </div> }   
             
             </div>

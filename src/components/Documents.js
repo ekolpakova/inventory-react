@@ -8,11 +8,6 @@ import useGetNewAccessToken from "../hooks/useGetNewAccessToken";
 import useAuth from "../hooks/useAuth";
 import "../index.css";
 
-import RemoveCircleIcon from "@mui/icons-material/RemoveCircle";
-import { IconButton } from "@material-ui/core";
-import AddCircleIcon from "@mui/icons-material/AddCircle";
-import { Select } from "@mui/material";
-import CancelIcon from "@mui/icons-material/Cancel";
 
 //Потестить интерцептор реквеста здесь - должен автоматически передать в реквест токен
 const Inventory = (props) => {

@@ -3,8 +3,6 @@ import useSetInterceptors from "../hooks/useSetInterceptors";
 import Constants from "../constants/Constants";
 import useAuth from "../hooks/useAuth";
 
-import AddCircleIcon from "@mui/icons-material/AddCircle";
-import RemoveCircleIcon from "@mui/icons-material/RemoveCircle";
 
 const Admin = () => {
   const ROLES = {
@@ -121,7 +119,7 @@ const Admin = () => {
                   </div>
                   <div>
                     <i>
-                      <RemoveCircleIcon className="circleRemove" onClick={(e) => handleRemoveRoles(user.username)}/>
+                      <button className="circleRemove" onClick={(e) => handleRemoveRoles(user.username)}/>
                     </i>
                   </div>
                 </div>

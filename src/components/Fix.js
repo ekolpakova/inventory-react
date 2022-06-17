@@ -5,10 +5,7 @@ import useGet from "../hooks/useGet";
 import useAuth from "../hooks/useAuth";
 import useSetInterceptors from "../hooks/useSetInterceptors";
 
-import { IconButton } from "@material-ui/core";
-import AddCircleIcon from "@mui/icons-material/AddCircle";
-import RemoveCircleIcon from "@mui/icons-material/RemoveCircle";
-import DownloadIcon from '@mui/icons-material/Download';
+
 
 const Fix = () => {
   const { handleUpdate, handleDropdown } = useUpdate();
@@ -149,8 +146,15 @@ const Fix = () => {
       }
     })
 
+    setFixes((prev) => [...prev, res.data]);
+
     if(res) console.log("Item was added")
+    
   };
+
+  const handleActDownload = async (fix) => {
+
+  }
 
   return (
     <div className="main">
@@ -164,7 +168,7 @@ const Fix = () => {
           <div>Действие</div>
         </div>
         
-          {fixes.map((fix) =>
+          {fixes.length > 0 && fixes.map((fix) =>
               <div className="table">
               <div className="headings">
                 <div>Наименование</div>
@@ -174,8 +178,8 @@ const Fix = () => {
                 <div>Действие</div>
               </div>  
               <div className="contents">
-                { fix.inventoryItem !== null && <div contentEditable="true">{fix.inventoryItem.name}</div>}
-                { fix.inventoryItem === null && <div contentEditable="true"></div>}
+                { fix !== undefined && fix.inventoryItem !== null && <div contentEditable="true">{fix.inventoryItem.name}</div>}
+                { fix !== undefined && fix.inventoryItem === null && <div contentEditable="true"></div>}
                 <div
                   contentEditable="true"
                   onChange={(e) => setFix(e.target.value)}
@@ -183,15 +187,15 @@ const Fix = () => {
                     handleUpdate(
                       e,
                       "http://localhost:8080/api/v1/moderator/updateFixCell",
-                      fix.id,
+                      fix !== undefined && fix.id,
                       "description",
                       e.target.innerText
                     )
                   }
                 >
-                  {fix.description}
+                  {fix !== undefined && fix.description}
                 </div>
-                <div onChange={(e) => setUser(e.target.innerText)}>{fix.responsiblePerson.username}</div>
+                <div onChange={(e) => setUser(e.target.innerText)}>{fix !== undefined && fix.responsiblePerson.username}</div>
                 <div
                   contentEditable="true"
                   onDoubleClick={(e) =>
@@ -204,12 +208,10 @@ const Fix = () => {
                     )
                   }
                 >
-                  {fix.phone}
+                  {fix !== undefined && fix.phone}
                 </div>
                 <div>
-                  <IconButton>
-                    <DownloadIcon className="download"></DownloadIcon>
-                  </IconButton>
+                  <button onClick={() => handleActDownload(fix !== undefined && fix)}>Download</button>
                 </div>
               </div>
               </div>
@@ -228,6 +230,7 @@ const Fix = () => {
           <form id="addForm" className="contents">
             <div>
               <select className="dropdown" onChange={(e) => setItem(e.target.value)}>
+                <option>1</option>
                 { items.map((item) => <option value={item.id}>{item.name}</option>) }
               </select>
             </div>
@@ -240,6 +243,7 @@ const Fix = () => {
             
             <div>
               <select className="dropdown" onChange={(e) => setUser(e.target.value)}>
+                <option>2</option>
                 { users.map((user) => <option value={user.id}>{user.username}</option> ) }
               </select>
             </div>
@@ -250,9 +254,9 @@ const Fix = () => {
       ></input></div>
        
             <div>
-              <IconButton onClick={(e) => handleAddFix(e)}>
-                <AddCircleIcon className="circleAdd"></AddCircleIcon>
-              </IconButton>
+              <button onClick={(e) => handleAddFix(e)}>
+               
+              </button>
             </div>
           </form>
         </div>

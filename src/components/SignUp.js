@@ -3,9 +3,6 @@ import { useAuth } from "../context/AuthProvider";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import axios from "axios";
 
-import PersonIcon from "@mui/icons-material/Person";
-import LockIcon from "@mui/icons-material/Lock";
-
 import img from "../images/code.jpg";
 
 const SignUp = () => {
@@ -49,7 +46,7 @@ const SignUp = () => {
             <div className="form-container">
               <form onSubmit={(e) => handleRegister(e, username, password)}>
                 <div className="input-Container">
-                  <i>{<PersonIcon />}</i>
+                  <i></i>
                   <input
                     type="text"
                     name=""
@@ -60,7 +57,7 @@ const SignUp = () => {
                   ></input>
                 </div>
                 <div className="input-Container">
-                  <i>{<LockIcon />}</i>
+                  <i></i>
                   <input
                     type="password"
                     name=""

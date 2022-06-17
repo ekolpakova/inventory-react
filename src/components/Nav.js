@@ -2,7 +2,6 @@ import { Link } from "react-router-dom";
 import SignIn from "./SignIn";
 import Inventory from "./Inventory";
 
-import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import Admin from "./Admin";
 import InventoryByClassrooms from "./InventoryByClassrooms";
 import Profile from "./Profile";
@@ -30,7 +29,7 @@ const Nav = () => {
         </Link>
       </div>
       <div className="profile">
-        <AccountCircleIcon />
+
       </div>
     </div>
   );

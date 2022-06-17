@@ -14,7 +14,6 @@
 [class*=" icon-"] {
   /* use !important to prevent issues with browser extensions that change fonts */
   font-family: "inventory" !important;
-  speak: never;
   font-style: normal;
   font-weight: normal;
   font-variant: normal;
@@ -227,7 +226,6 @@ input:focus {
 [class*=" icon-"] {
   /* use !important to prevent issues with browser extensions that change fonts */
   font-family: "inventory" !important;
-  speak: never;
   font-style: normal;
   font-weight: normal;
   font-variant: normal;
@@ -266,10 +264,6 @@ input:focus {
 
 h1 {
   margin-bottom: 1rem;
-}
-
-div > textarea {
-  /*border-bottom: 1px solid #b2b2b2;*/
 }
 
 .addForm {
