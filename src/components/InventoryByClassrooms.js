@@ -159,15 +159,11 @@ const InventoryByClassrooms = () => {
                     className="button buttonFilter"
                     style={{ padding: "0.5rem" }}
                   ></input>
-                  <select
-                    className="dropdown"
-                    onChange={(e) => handleFilterLive(e.target.value)}
-                    style={{ marginLeft: "1rem" }}
-                  >
-                    {categories.map((cat) => (
-                      <option value={cat.id}>{cat.name}</option>
-                    ))}
-                  </select>
+                 
+
+
+
+                 
                 </div>
               </div>
             </form>

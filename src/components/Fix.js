@@ -146,7 +146,6 @@ const Fix = () => {
       }
     })
 
-    setFixes((prev) => [...prev, res.data]);
 
     if(res) console.log("Item was added")
     
@@ -195,7 +194,7 @@ const Fix = () => {
                 >
                   {fix !== undefined && fix.description}
                 </div>
-                <div onChange={(e) => setUser(e.target.innerText)}>{fix !== undefined && fix.responsiblePerson.username}</div>
+                   <div onChange={(e) => setUser(e.target.innerText)}>{fix.inventoryItem !== undefined &&  fix.inventoryItem !== null && fix?.inventoryItem?.responsiblePerson?.username}</div>
                 <div
                   contentEditable="true"
                   onDoubleClick={(e) =>
@@ -211,7 +210,9 @@ const Fix = () => {
                   {fix !== undefined && fix.phone}
                 </div>
                 <div>
-                  <button onClick={() => handleActDownload(fix !== undefined && fix)}>Download</button>
+                  <button onClick={() => handleActDownload(fix !== undefined && fix)} style={{ borderRadius: '100%', backgroundColor: '#e12a36', color: '#fff', border: 'none' }}>
+                    <span className="material-symbols-outlined circleRemove">do_not_disturb_on</span>
+                  </button>
                 </div>
               </div>
               </div>
@@ -230,7 +231,7 @@ const Fix = () => {
           <form id="addForm" className="contents">
             <div>
               <select className="dropdown" onChange={(e) => setItem(e.target.value)}>
-                <option>1</option>
+                <option>Наименование</option>
                 { items.map((item) => <option value={item.id}>{item.name}</option>) }
               </select>
             </div>
@@ -243,7 +244,7 @@ const Fix = () => {
             
             <div>
               <select className="dropdown" onChange={(e) => setUser(e.target.value)}>
-                <option>2</option>
+                <option>Ответственное лицо</option>
                 { users.map((user) => <option value={user.id}>{user.username}</option> ) }
               </select>
             </div>
@@ -254,9 +255,9 @@ const Fix = () => {
       ></input></div>
        
             <div>
-              <button onClick={(e) => handleAddFix(e)}>
-               
-              </button>
+            <button style={{ borderRadius: '100%', backgroundColor: '#0ead44', color: '#fff', border: 'none' }} onClick={(e) => handleAddFix(e)}>
+                  <span className="material-symbols-outlined circleAdd">add_circle</span>
+                  </button>
             </div>
           </form>
         </div>

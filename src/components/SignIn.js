@@ -27,10 +27,6 @@ const SignIn = () => {
     setRememberMe((prev) => !prev);
   };
 
-  useEffect(() => {
-    localStorage.setItem("rememberMe", rememberMe);
-  }, [rememberMe]);
-
   const handleLogin = async (e) => {
     e.preventDefault();
     const api = `http://localhost:8080/api/v1/public/signIn`;
@@ -116,7 +112,7 @@ const SignIn = () => {
             <div className="form-container">
               <form onSubmit={(e) => handleLogin(e)}>
                 <div className="input-Container">
-                  <i></i>
+                  <i><span className="material-symbols-outlined">search</span></i>
                   <input
                     type="text"
                     name="username"
@@ -130,7 +126,7 @@ const SignIn = () => {
                 </div>
                {(usernameClicked && usernameError) && <div style={{ color: 'red'}}>{usernameError}</div>}
                 <div className="input-Container">
-                  <i></i>
+                  <i><span className="material-symbols-outlined">lock</span></i>
                   <input
                     type="password"
                     name="password"

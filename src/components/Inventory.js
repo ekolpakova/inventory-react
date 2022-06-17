@@ -24,7 +24,10 @@ const Inventory = (props) => {
   const [categoryId, setCategoryId] = useState(1);
   const [id, setId] = useState();
 
-  const [name, setName] = useState("");
+  const [name, setName] = useState("");  
+  const [nameError, setNameError] = useState("Наименование не может быть пустым");
+  const [nameClicked, setNameClicked] = useState(false);
+
   const [specs, setSpecs] = useState("");
   const [commentary, setCommentary] = useState("");
   const [commentaryChernega, setCommentaryChernega] = useState("");
@@ -51,6 +54,24 @@ const Inventory = (props) => {
 
   const prevInventoryItems = useRef([]);
 
+  const nameHandler = (e) => {
+    setName(e.target.value)
+      if(!e.target.value) {
+        setNameError("Наименование не может быть пустым")
+      } else {
+        setNameError("")
+      }
+  }
+
+
+  const clickHandler = (e) => {
+    switch (e.target.name) {
+      case 'name':
+        setNameClicked(true)
+        break
+    }
+  }
+
   useEffect(() => {
     {auth?.roles
       ?.map((role) => role.name)
@@ -70,32 +91,10 @@ const Inventory = (props) => {
     setValues({ ...values, [prop]: event.target.value });
   };
 
-  const handleClickShowPassword = () => {
-    setValues({
-      ...values,
-      showPassword: !values.showPassword,
-    });
-  };
-
-  const handleMouseDownPassword = (event) => {
-    event.preventDefault();
-  };
-
   useEffect(() => {
     prevInventoryItem.current = inventoryItem;
   }, [inventoryItem]);
 
-  /*useEffect(() => {
-    setInventoryItems(
-      inventoryItems.filter((item) => item.name.toLowerCase().includes(search))
-    );
-  }, [search]);*/
-
-  const handleDate = (date) => {
-    const tmp = date.getTime();
-    const dateParsed = new Date(tmp);
-    return dateParsed.toLocaleString("sv");
-  };
 
   const handleFilter = async (e) => {
     e.preventDefault();
@@ -124,38 +123,6 @@ const Inventory = (props) => {
     };
   };
 
-  const handleFilterLive = (e) => {
-          setInventoryItems([
-            ...inventoryItems.filter((item) => item.category.name !== value),
-          ]);
-  };
-
-  /*useEffect(() => {
-    setInventoryItems(
-      //...inventoryItems,
-      inventoryItems.filter((item) => item.name.includes(search))
-    );
-  }, [search]);*/
-
-  const searchItems = (inventoryItems) => {
-    return inventoryItems.filter((item) => item.name === "Stephen");
-  };
-
-  /*const handleSearch = (e) => {
-    e.preventDefault();
-    setInventoryItems(
-      inventoryItems.filter((item) => item.name.toLowerCase().includes(search))
-    );
-  };*/
-
-  const handleAddInputs = () => {
-    setNumChildren(numChildren + 1);
-  };
-
-  const handleCategoryFilter = (e) => {
-    e.preventDefault();
-  };
-
   const handleCreate = async (e) => {
     e.preventDefault();
     const api = `http://localhost:8080/api/v1/moderator/addInventoryItem`;
@@ -165,6 +132,7 @@ const Inventory = (props) => {
       specs: specs,
       commentary: commentary,
       commentaryChernega: commentaryChernega,
+      dateTaken: date
     });
     const res = await setInterceptors.post(api, json, {
       headers: {
@@ -502,10 +470,10 @@ const Inventory = (props) => {
                   </div>
 
                   <div>
-                    <button
+                    <button style={{ borderRadius: '100%', backgroundColor: '#e12a36', color: '#fff', border: 'none' }}
                       onClick={(e) => handleDelete(e, inventoryItem.id)}
                     >
-                      
+                      <span className="material-symbols-outlined circleRemove">do_not_disturb_on</span>
                     </button>
                   </div>
                 </div>
@@ -546,10 +514,13 @@ const Inventory = (props) => {
                 </div>
                 <div>
                   <input
+                    name="name"
+                    value={name}
                     type="text"
                     className="table-input"
-                    onChange={(e) => setName(e.target.value)}
+                    onChange={(e) => nameHandler(e)}
                   ></input>
+                  {(nameClicked && nameError) && <div style={{ color: 'red'}}>{nameError}</div>}
                 </div>
                 <div>
                   <input
@@ -580,8 +551,8 @@ const Inventory = (props) => {
                   ></input>
                 </div>
                 <div>
-                  <button onClick={(e) => handleCreate(e)}>
-                   
+                  <button style={{ borderRadius: '100%', backgroundColor: '#0ead44', color: '#fff', border: 'none' }} onClick={(e) => handleCreate(e)}>
+                  <span className="material-symbols-outlined circleAdd">add_circle</span>
                   </button>
                 </div>
               </form>}        

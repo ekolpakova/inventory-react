@@ -46,6 +46,9 @@ const Inventory = (props) => {
   const [param, setParam] = useState("name");
   const [value, setValue] = useState("");
 
+  const [users, setUsers] = useState([]);
+  const [fixes, setFixes] = useState([]);
+
   const [contracts, setContracts] = useState([]);
   const [sourcesOfFunds, setSourcesOfFunds] = useState([]);
 
@@ -88,18 +91,6 @@ const Inventory = (props) => {
     prevInventoryItem.current = inventoryItem;
   }, [inventoryItem]);
 
-  /*useEffect(() => {
-    setInventoryItems(
-      inventoryItems.filter((item) => item.name.toLowerCase().includes(search))
-    );
-  }, [search]);*/
-
-  const handleDate = (date) => {
-    const tmp = date.getTime();
-    const dateParsed = new Date(tmp);
-    return dateParsed.toLocaleString("sv");
-  };
-
   const handleFilter = async (e) => {
     e.preventDefault();
     let isMounted = true;
@@ -132,24 +123,10 @@ const Inventory = (props) => {
       ...inventoryItems.filter((item) => item.category.name !== value),
     ]);
   };
-
-  /*useEffect(() => {
-    setInventoryItems(
-      //...inventoryItems,
-      inventoryItems.filter((item) => item.name.includes(search))
-    );
-  }, [search]);*/
-
+  
   const searchItems = (inventoryItems) => {
     return inventoryItems.filter((item) => item.name === "Stephen");
   };
-
-  /*const handleSearch = (e) => {
-    e.preventDefault();
-    setInventoryItems(
-      inventoryItems.filter((item) => item.name.toLowerCase().includes(search))
-    );
-  };*/
 
   const handleAddInputs = () => {
     setNumChildren(numChildren + 1);
@@ -185,37 +162,6 @@ const Inventory = (props) => {
     }
   };
 
-  /*const handleUpdate = async (e, id, name) => {
-    e.preventDefault();
-    const arr = [...inventoryItems];
-    arr[id][name] = inventoryItem;
-    setInventoryItems(arr);
-    console.log(arr);
-
-    await handleDbUpdate(id, name, inventoryItem);
-
-    /*console.log(1);
-    setTodos((prev) =>
-      prev.map((item) => (item.key === key ? { ...item, name: "Jake" } : item))
-    );
-  };
-  */
-
-  const handleChang = (e, key) => {
-    e.preventDefault();
-    console.log("Test II");
-    //setIsEditable(true);
-
-    setInventoryItems(
-      (prev) => console.log(prev)
-      /*{ 
-      inventoryItems: prev.inventoryItems.map((item) =>
-        item.key === key ? { ...item, name: "Дом Периньон" } : item
-      ),
-    }*/
-    );
-  };
-
   const handleUpdate = async (e, id, col, colVal) => {
     e.preventDefault();
     console.log("id", id);
@@ -242,7 +188,6 @@ const Inventory = (props) => {
   };
 
   const handleDropdown = async (api, id) => {
-    //const api = `http://localhost:8080/api/v1/moderator/inventoryDTO/${itemId}`;
      const json = JSON.stringify({
        id: id
      });
@@ -277,7 +222,6 @@ const Inventory = (props) => {
         const data = await res.data;
         console.log(data);
         isMounted && setCategories(data);
-        //setCategories(data);
         console.log(data);
       } catch (err) {
         console.log(err);
@@ -306,7 +250,6 @@ const Inventory = (props) => {
 
         const data = await res.data;
         isMounted && setContracts(data);
-        //setCategories(data);
         console.log("contracts" + data);
       } catch (err) {
         console.log(err);
@@ -358,9 +301,6 @@ const Inventory = (props) => {
         const api = `http://localhost:8080/api/v1/moderator/inventory`;
 
         const res = await setInterceptors.get(api, {
-          /*headers: {
-            Authorization: `Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJsaXNhIiwiYXV0aG9yaXRpZXMiOlt7ImF1dGhvcml0eSI6Ik1PREVSQVRPUiJ9LHsiYXV0aG9yaXR5IjoiUkVBREVSIn0seyJhdXRob3JpdHkiOiJVU0VSUzpSRUFEIn0seyJhdXRob3JpdHkiOiJVU0VSUzpVUERBVEUifSx7ImF1dGhvcml0eSI6IlVTRVJTOldSSVRFIn1dLCJyb2xlcyI6WyJNT0RFUkFUT1IiLCJSRUFERVIiLCJVU0VSUzpSRUFEIiwiVVNFUlM6VVBEQVRFIiwiVVNFUlM6V1JJVEUiXSwiaWF0IjoxNjUzNDk4NjMyLCJleHAiOjE2NTM0OTg5MzJ9.LuzBJsnxOQ2SYUgho6Y_uqkBxelVsuJ5JJmGunBfsDY`,
-          },*/
           signal: controller.signal,
         });
 
@@ -369,7 +309,6 @@ const Inventory = (props) => {
         console.log(data);
       } catch (err) {
         console.log(err);
-        //navigate("/signIn", { state: { from: location }, replace: true });
       }
     };
 
@@ -380,6 +319,71 @@ const Inventory = (props) => {
       controller.abort();
     };
   }, []);
+
+  useEffect(() => {
+    let isMounted = true;
+    const controller = new AbortController();
+
+    const getUsers = async () => {
+      try {
+        const api = `http://localhost:8080/api/v1/moderator/users`;
+
+        const res = await setInterceptors.get(api, {
+          headers: {
+            Authorization: `Bearer ${auth.accessToken}`,
+          },
+          signal: controller.signal,
+        });
+
+        const data = await res.data;
+
+        isMounted && setUsers(data);
+        console.log(data);
+      } catch (err) {
+        console.log(err);
+      }
+    };
+
+    getUsers();
+
+    return () => {
+      isMounted = false;
+      controller.abort();
+    };
+  }, []);
+
+  useEffect(() => {
+    let isMounted = true;
+    const controller = new AbortController();
+
+    const getFixes = async () => {
+      try {
+        const api = `http://localhost:8080/api/v1/moderator/fixes`;
+
+        const res = await setInterceptors.get(api, {
+          headers: {
+            Authorization: `Bearer ${auth.accessToken}`,
+          },
+          signal: controller.signal,
+        });
+
+        const data = await res.data;
+
+        isMounted && setFixes(data);
+        console.log(data);
+      } catch (err) {
+        console.log(err);
+      }
+    };
+
+    getFixes();
+
+    return () => {
+      isMounted = false;
+      controller.abort();
+    };
+  }, []);
+
 
   const handleDelete = async (e, key) => {
     e.preventDefault();
@@ -444,7 +448,6 @@ const Inventory = (props) => {
             </div>
           </form>
         </div>
-        <form></form>
       </div>
       <div>
         <div className="wrapper">
@@ -456,6 +459,7 @@ const Inventory = (props) => {
             <div>Выдано</div>
             <div>Куплено по заявке</div>
             <div>Номер в кабинете</div>
+            <div>Действие</div>
           </div>
           {contracts.inventoryItems !== undefined > 0 &&
             contracts.map((con) =>
@@ -469,6 +473,7 @@ const Inventory = (props) => {
                     <div>Выдано</div>
                     <div>Куплено по заявке</div>
                     <div>Номер в кабинете</div>
+                    <div>Действие</div>
                   </div>
                   <div className="contents">
                     <div style={{ display: "grid" }}>
@@ -484,6 +489,7 @@ const Inventory = (props) => {
                           )
                         }
                       >
+                        <option>Договор</option>
                         {contracts.map((c) => (
                           <option key={c.id} value={c.id}>
                             {c.name}
@@ -505,14 +511,34 @@ const Inventory = (props) => {
                             )
                           }
                         >
+                          <option>ИФО</option>
                           {sourcesOfFunds.map((s) => (
                             <option value={s.id}>{s.name}</option>
                           ))}
                         </select>
                       )}
                     </div>
-                    <div></div>
-                    <div>{i?.responsiblePerson?.username}</div>
+                    <div style={{ display: "grid" }}>
+                      <div style={{ padding: "0 0 0.5rem 0.5rem" }}>
+                        {i?.responsiblePerson?.username}
+                      </div>
+                      {users.length > 0 && (
+                        <select
+                          className="dropdown"
+                          onChange={(e) =>
+                            handleDropdown(
+                              `http://localhost:8080/api/v1/moderator/sourcesOfFunds/inventoryDTO/${i.id}`,
+                              e.target.value
+                            )
+                          }
+                        >
+                          <option>Ответственное лицо</option>
+                          {users.map((u) => (
+                            <option value={u.id}>{u.username!==undefined && u.username}</option>
+                          ))}
+                        </select>
+                      )}
+                    </div>
                     <div>
                       {" "}
                       <textarea
@@ -562,10 +588,40 @@ const Inventory = (props) => {
                         }}
                       ></textarea>
                     </div>
+                    <div>
+                    <button style={{ borderRadius: '100%', backgroundColor: '#e12a36', color: '#fff', border: 'none' }}
+                      onClick={(e) => handleDelete(e, inventoryItem.id)}
+                    >
+                      <span className="material-symbols-outlined circleRemove">do_not_disturb_on</span>
+                    </button>
+                  </div>
                   </div>
                 </div>
               ))
             )}
+
+<div className="table">
+          <div className="headings">
+            <div>Договор</div>
+            <div>ИФО</div>
+            <div>Ответственное лицо</div>
+            <div>Инвентарный номер</div>
+            <div>Выдано</div>
+            <div>Куплено по заявке</div>
+            <div>Номер в кабинете</div>
+            <div>Действие</div>
+          </div>
+
+          <form id="addForm" className="contents">
+         
+       
+            <div>
+            <button style={{ borderRadius: '100%', backgroundColor: '#0ead44', color: '#fff', border: 'none' }} >
+                  <span className="material-symbols-outlined circleAdd">add_circle</span>
+                  </button>
+            </div>
+          </form>
+        </div>
         </div>
       </div>
     </div>
