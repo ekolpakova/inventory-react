@@ -476,8 +476,8 @@ const Inventory = (props) => {
                     <div>Действие</div>
                   </div>
                   <div className="contents">
-                    <div style={{ display: "grid" }}>
-                      <div style={{ padding: "0 0 0.5rem 0.5rem" }}>
+                    <div style={{ display: "grid"}}>
+                      <div style={{ padding: "0 0 0.5rem 0.5rem", whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', zIndex: '10000', backgroundColor: '#fff'}} className="text_holder">
                         {con.name}
                       </div>
                       <select
@@ -614,7 +614,54 @@ const Inventory = (props) => {
 
           <form id="addForm" className="contents">
          
-       
+       <div><select
+                        className="dropdown"
+                        onChange={(e) =>
+                          handleDropdown(
+                            `http://localhost:8080/api/v1/moderator/inventoryDTO/`,
+                            e.target.value
+                          )
+                        }
+                      >
+                        <option>Договор</option>
+                        {contracts.map((c) => (
+                          <option key={c.id} value={c.id}>
+                            {c.name}
+                          </option>
+                        ))}
+                      </select></div>
+                      <div><select
+                          className="dropdown"
+                          onChange={(e) =>
+                            handleDropdown(
+                              `http://localhost:8080/api/v1/moderator/sourcesOfFunds/inventoryDTO/`,
+                              e.target.value
+                            )
+                          }
+                        >
+                          <option>ИФО</option>
+                          {sourcesOfFunds.map((s) => (
+                            <option value={s.id}>{s.name}</option>
+                          ))}
+                        </select></div>
+                        <div><select
+                          className="dropdown"
+                          onChange={(e) =>
+                            handleDropdown(
+                              `http://localhost:8080/api/v1/moderator/sourcesOfFunds/inventoryDTO/`,
+                              e.target.value
+                            )
+                          }
+                        >
+                          <option>Ответственное лицо</option>
+                          {users.map((u) => (
+                            <option value={u.id}>{u.username!==undefined && u.username}</option>
+                          ))}
+                        </select></div>
+                        <div><input type="text" style={{ font: 'inherit', borderRadius: '0.5rem', border: "1px solid rgb(194, 194, 194)", padding: '0.5rem 1rem', width: '100%'  }}></input></div>
+                        <div><input type="checkbox"></input></div>
+                        <div><input type="checkbox"></input></div>
+                        <div><input type="text" style={{ font: 'inherit', borderRadius: '0.5rem', border: "1px solid rgb(194, 194, 194)", padding: '0.5rem 1rem', width: '100%' }}></input></div>
             <div>
             <button style={{ borderRadius: '100%', backgroundColor: '#0ead44', color: '#fff', border: 'none' }} >
                   <span className="material-symbols-outlined circleAdd">add_circle</span>

@@ -8,8 +8,19 @@ import Profile from "./Profile";
 import Documents from "./Documents"
 import Fix from "./Fix";
 import BelongsTo from "./BelongsTo";
+import axios from "axios";
+import useAuth from "../hooks/useAuth";
 
 const Nav = () => {
+  const {auth} = useAuth();
+
+  const logout = async (e) => {
+    e.preventDefault();
+    axios.get("http://localhost:8080/api/v1/public/logout",{
+     withCredentials: true
+    })
+  }
+
   return (
     <div className="navbar">
       {" "}
@@ -29,7 +40,9 @@ const Nav = () => {
         </Link>
       </div>
       <div className="profile">
-
+        <button  onClick={(e) => logout(e)}> <span class="material-symbols-outlined" style={{color: '#fff', transform: 'scale(1.3)'}}>
+          logout
+        </span></button>
       </div>
     </div>
   );

@@ -20,6 +20,7 @@ const Fix = () => {
 
   const [desc, setDesc] = useState("");
   const [phone, setPhone] = useState("");
+  const [date, setDate] = useState("");
 
   const { get } = useGet();
   const { auth } = useAuth();
@@ -134,7 +135,8 @@ const Fix = () => {
     const api = "http://localhost:8080/api/v1/moderator/addFix";
     const json = JSON.stringify({
       description: desc,
-      phone: phone
+      phone: phone,
+      date: date
     });
     const res = setInterceptors.post(api, json, {
       params: {
@@ -164,16 +166,18 @@ const Fix = () => {
           <div>Описание поломки</div>
           <div>Ответственное лицо</div>
           <div>Контактный телефон</div>
+          <div>Дата</div>
           <div>Действие</div>
         </div>
         
-          {fixes.length > 0 && fixes.map((fix) =>
+          {fixes.length > 0 && fix !== undefined && fixes.map((fix) =>
               <div className="table">
               <div className="headings">
                 <div>Наименование</div>
                 <div>Описание поломки</div>
                 <div>Ответственное лицо</div>
-                <div>Контактный телефон</div>
+                <div>Контактный телефон</div> 
+                <div>Дата</div>
                 <div>Действие</div>
               </div>  
               <div className="contents">
@@ -209,6 +213,7 @@ const Fix = () => {
                 >
                   {fix !== undefined && fix.phone}
                 </div>
+                { fix !== undefined && <div>{new Date(fix.date).toLocaleDateString("cv")}</div> }
                 <div>
                   <button onClick={() => handleActDownload(fix !== undefined && fix)} style={{ borderRadius: '100%', backgroundColor: '#e12a36', color: '#fff', border: 'none' }}>
                     <span className="material-symbols-outlined circleRemove">do_not_disturb_on</span>
@@ -225,6 +230,7 @@ const Fix = () => {
             <div>Описание поломки</div>
             <div>Ответственное лицо</div>
             <div>Контактный телефон</div>
+            <div>Дата</div>
             <div>Действие</div>
           </div>
 
@@ -253,6 +259,19 @@ const Fix = () => {
         value={phone}
         onChange={(e) => setPhone(e.target.value)}
       ></input></div>
+          
+
+
+<div>
+          <input
+                    type="date"
+                    className="table-input"
+                    onChange={(e) => setDate(e.target.value)}
+                  ></input>
+                </div>
+
+
+
        
             <div>
             <button style={{ borderRadius: '100%', backgroundColor: '#0ead44', color: '#fff', border: 'none' }} onClick={(e) => handleAddFix(e)}>

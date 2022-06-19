@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import { useAuth } from "../context/AuthProvider";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import axios from "axios";
@@ -12,6 +12,14 @@ const SignUp = () => {
   const from = location.state?.from?.pathname || "/";
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+
+  const [usernameClicked, setUsernameClicked] = useState(false);
+  const [passwordClicked, setPasswordClicked] = useState(false);
+
+  const [usernameError, setUsernameError] = useState("Логин не может быть пустым");
+  const [passwordError, setPasswordError] = useState("Пароль не может быть пустым");
+
+  const [formValid, setFormValid] = useState(false);
 
   const tableRef = useRef(null);
 
@@ -34,6 +42,52 @@ const SignUp = () => {
     }
   };
 
+  const clickHandler = (e) => {
+    switch (e.target.name) {
+      case 'username':
+        setUsernameClicked(true)
+        break
+      case 'password':
+        setPasswordClicked(true)  
+        break
+    }
+  }
+
+  const usernameHandler = (e) => {
+    setUsername(e.target.value)
+    const re = /([A-Za-z0-9])\w+/
+    if(!re.test(String(e.target.value).toLowerCase())) {
+      setUsernameError("Логин должен содержать только цифры и буквы английского алфавита")
+      if(!e.target.value) {
+        setPasswordError("Логин не может быть пустым")
+      }
+    } else {
+      setUsernameError("")
+    }
+  }
+
+  const passwordHandler = (e) => {
+    setPassword(e.target.value)
+    if(e.target.value.length < 4) { 
+      setPasswordError("Пароль должен содержать не меньше 4 символов"); 
+      if(!e.target.value) {
+        setPasswordError("Пароль не может быть пустым")
+      }
+   }
+   else {
+    setPasswordError("")
+   }
+  }
+
+  useEffect(() => {
+    if (usernameError || passwordError) {
+      setFormValid(false)
+    }
+    else {
+      setFormValid(true)
+    }
+  }, [usernameError, passwordError])
+
   return (
     <>
       <div className="main center">
@@ -46,27 +100,31 @@ const SignUp = () => {
             <div className="form-container">
               <form onSubmit={(e) => handleRegister(e, username, password)}>
                 <div className="input-Container">
-                  <i></i>
+                <i><span className="material-symbols-outlined">search</span></i>
                   <input
                     type="text"
-                    name=""
+                    name="username"
                     value={username}
                     className="text"
                     placeholder="Имя пользователя"
-                    onChange={(e) => setUsername(e.target.value)}
+                    onChange={(e) => usernameHandler(e)}
+                    onClick={(e) => clickHandler(e)}
                   ></input>
                 </div>
+                {(usernameClicked && usernameError) && <div style={{ color: 'red'}}>{usernameError}</div>}
                 <div className="input-Container">
-                  <i></i>
+                <i><span className="material-symbols-outlined">lock</span></i>
                   <input
                     type="password"
-                    name=""
+                    name="password"
                     value={password}
                     className="text"
                     placeholder="Пароль"
-                    onChange={(e) => setPassword(e.target.value)}
+                    onChange={(e) => passwordHandler(e)}
+                    onClick={(e) => clickHandler(e)}
                   ></input>
                 </div>
+                {(passwordClicked && passwordError) && <div style={{ color: 'red'}}>{passwordError}</div>}
                 <div className="remember-me-container">
                   <input
                     type="submit"

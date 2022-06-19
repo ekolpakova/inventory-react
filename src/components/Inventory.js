@@ -146,7 +146,7 @@ const Inventory = (props) => {
 
     if (res) {
       console.log("Item was created");
-      alert("Item was created");
+      alert("Запись добавлена");
     }
   };
 
@@ -246,7 +246,7 @@ const Inventory = (props) => {
     );
 
     let isDelete = window.confirm("Удалить запись?");
-    alert(isDelete);
+    alert("Запись удалена");
 
     setInventoryItems([...inventoryItems.filter((item) => item.id !== key)]);
 
@@ -736,9 +736,14 @@ const Inventory = (props) => {
               </div>
 
                {disabled && <div style={{ textAlign: 'center' }}>
-                <button onClick={(e) => handleDelete(e, inventoryItem.id)}>
+                
+             
+                    <button style={{ borderRadius: '100%', backgroundColor: '#e12a36', color: '#fff', border: 'none' }}
+                      onClick={(e) => handleDelete(e, inventoryItem.id)}
+                    >
+                      <span className="material-symbols-outlined circleRemove">do_not_disturb_on</span>
+                    </button>
                   
-                </button>
               </div> }   
             
             </div>

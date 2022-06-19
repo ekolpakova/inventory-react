@@ -10,18 +10,15 @@ const Profile = (props) => {
   const setInterceptors = useSetInterceptors();
   const [picture, setPicture] = useState(null);
   const profilePicture = useRef();
+  const [user, setUser] = useState({});
 
   const saveProfilePicture = async (e) => {
     setPicture(e.target.files[0]);
-    //profilePicture.src = data.url;
   };
 
   const uploadProfilePicture = async (e) => {
     e.preventDefault();
     const api = "http://localhost:8080/api/v1/public/addUserImage";
-
-    /*const fd = new FormData();
-    fd.append("picture", picture)*/
 
     const res = await setInterceptors.put(
       api,
@@ -63,18 +60,50 @@ const Profile = (props) => {
 
       const data = await res.data;
 
-      //await convertToBase64(data);
-      //console.log(convertToBase64(data));
-     
-      //profilePicture.src = "data:image/jpeg;base64, " +  window.btoa(data);
+    
     };
 
     getProfilePicture();
   });
 
+
+  useEffect(() => {
+    let isMounted = true;
+    const controller = new AbortController();
+
+    const getUser = async () => {
+      try {
+        const api = `http://localhost:8080/api/v1/public/userById/${auth.id}`;
+
+        const res = await axios.get(api, {
+          signal: controller.signal,
+        });
+
+        const data = await res.data;
+        isMounted && setUser(data);
+        console.log(data);
+      } catch (err) {
+        console.log(err);
+      }
+    };
+
+    getUser();
+
+    return () => {
+      isMounted = false;
+      controller.abort();
+    };
+  }, []);
+
   return (
-    <>
+    <div className="main">
       <h1>Личный кабинет</h1>
+      <form style={{ display: 'grid', gridTemplateColumns: 'repeat(2,1fr', maxWidth: '300px'}}>
+        <label for="username">Логин</label>
+        <div contentEditable="true" name="username" id="username">{user.username}</div>
+        <label for="name">Имя</label>
+        <div contentEditable="true" name="name" id="name">{user.firstName}</div>
+      </form>
       <img
         alt="Фотография профиля"
         id="profile-picture"
@@ -94,7 +123,7 @@ const Profile = (props) => {
         ></input>
         Загрузить<input type="submit"></input>
       </form>
-    </>
+    </div>
   );
 };
 
